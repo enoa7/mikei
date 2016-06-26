@@ -1,0 +1,4 @@
+#List of Ignored Files
+
+node_modules/
+*.zip
