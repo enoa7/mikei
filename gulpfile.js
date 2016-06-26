@@ -99,8 +99,10 @@ gulp.task('env', function(){
     .pipe(gulp.dest(path))
 });
 
-// gulp.task('default', ['sass', 'js', 'browserSync'], function() {
-//     gulp.watch('*.scss', {cwd: path + '/sass'}, ['sass']);
-//     gulp.watch('**/*.scss', {cwd: path + '/sass'}, ['sass']);
-//     gulp.watch('*.js', {cwd: path + '/js'}, ['js']);
-// });
+
+//stash test 2
+gulp.task('default', ['sass', 'js', 'browserSync'], function() {
+    gulp.watch('*.scss', {cwd: path + '/sass'}, ['sass']);
+    gulp.watch('**/*.scss', {cwd: path + '/sass'}, ['sass']);
+    gulp.watch('*.js', {cwd: path + '/js'}, ['js']);
+});
