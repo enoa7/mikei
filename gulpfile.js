@@ -11,7 +11,7 @@ var merge = require('merge-stream');
 var reload = browserSync.reload;
 
 /* path to wp custom theme */
-var path = 'sneaky/wp-content/themes/mikei';
+var path = 'backend/wp-content/themes/mikei';
 
 /* ========================================================
  * Tasks with Browser Sync
@@ -30,7 +30,7 @@ gulp.task('browserSync', function() {
     ];
 
     browserSync.init(files, {
-        proxy: "http://localhost:8888/fokus.indosiar.com/",
+        proxy: "http://localhost/mikei",
         notify: 'false'
     });
 });
