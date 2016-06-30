@@ -1,32 +1,60 @@
 var gulp = require('gulp');
-var plumber = require('gulp-plumber');
-var sass = require('gulp-sass');
-var rename = require('gulp-rename');
-var autoprefixer = require('gulp-autoprefixer');
-var sourcemaps = require('gulp-sourcemaps');
-var concat = require('gulp-concat');
-var browserSync = require('browser-sync');
-var uglify = require('gulp-uglify');
+var plugins = require('gulp-load-plugins')();
 var merge = require('merge-stream');
+var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
-/* path to wp custom theme */
-var path = 'backend/wp-content/themes/mikei';
+/* ========================================================
+ * Paths Variable
+ * ======================================================== */
 
+// base paths for the project
+var basePaths = {
+    root: './',
+    theme: './backend/wp-content/themes/mikei/',
+    npm: './node_modules/'
+}
+
+// paths for the css/scss
+var style = {
+    main: basePaths.style + 'style.scss',
+    vendor: basePaths.style + 'vendor/'
+}
+
+// paths for npm modules
+var module = {
+    slick: basePaths.npm + 'slick-carousel/slick/',
+    fontawesome: basePaths.npm + 'slick-carousel/font-awesome/',
+    bootstrap: basePaths.npm + 'bootstrap-plugins.sass/assets/'
+}
+
+// paths for the dist folder
+var dist = './dist';
+
+// list of files that are being moved to dist folder
+var filesToMove = [
+    '*.php',
+    '*.css',
+    './template-parts/*',
+    './inc/*',
+    './fonts/*'
+];
+
+var jsFiles = [
+    basePaths.npm + 'jquery/dist/jquery.js',
+    basePaths.npm + 'fastclick/lib/*.js',
+    module.slick + 'slick.js',
+    'js/main.js'
+]
 /* ========================================================
  * Tasks with Browser Sync
  * ======================================================== */
 gulp.task('browserSync', function() {
 
     var files = [
-        path + '/*.css',
-        path + '/*.php',
-        path + '/inc/*.php',
-        path + '/js/*.js',
-        path + '/layouts/*.css',
-        path + '/sass/*.scss',
-        path + '/sass/**/*.scss',
-        path + '/template-parts/*.php',
+        '**/**/*.css',
+        '**/**/*.scss',
+        '**/**/*.php',
     ];
 
     browserSync.init(files, {
@@ -35,74 +63,122 @@ gulp.task('browserSync', function() {
     });
 });
 
-gulp.task('sass', function() {
-    return gulp.src(path + '/sass/style.scss')
-        .pipe(plumber({
-            errorHandler: function (err) {
+gulp.task('style', function() {
+    return gulp.src(basePaths.style + '/*.scss')
+        .pipe(plugins.plumber({
+            errorHandler: function(err) {
                 console.log(err);
                 this.emit('end');
             }
         }))
-        .pipe(sourcemaps.init())
-        .pipe(sass({ outputStyle: 'compressed' }))
-        .pipe(autoprefixer())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(path)) 
+        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.sass())
+        .pipe(plugins.autoprefixer())
+        .pipe(plugins.sourcemaps.write())
+        .pipe(plugins.rename('style.css'))
+        .pipe(gulp.dest(basePaths.theme))
         .pipe(reload({ stream: true }));
 });
 
 gulp.task('js', function() {
-    return gulp.src([
-            './node_modules/jquery/dist/jquery.js',
-            './node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-            './node_modules/fastclick/lib/*.js',
-            './node_modules/slick-carousel/slick/slick.js',
-            './node_modules/jquery-match-height/dist/jquery.matchHeight.js',
-            path + '/js/mikei.js',
-        ])
-        .pipe(concat('mikei.js'))
-        .pipe(gulp.dest(path))
-        .pipe(uglify())
-        .pipe(concat('mikei.min.js'))
-        .pipe(gulp.dest(path))
+    return gulp.src(jsFiles)
+        .pipe(plugins.concat('main.js'))
+        .pipe(gulp.dest(basePaths.theme))
         .pipe(reload({ stream: true }));
 });
 
-// Create a list utility task and merge them
-gulp.task('utility', function(){
 
-    // move slick fonts to the fonts under custom themes folder
-    var slick_fonts = gulp.src('node_modules/slick-carousel/slick/fonts/*')
-        .pipe(gulp.dest( path + '/fonts'));
+/* ========================================================
+ * Utility Tasks
+ * ======================================================== */
 
-    // move ajax loader to custom themes folder
-    var ajax_loader = gulp.src('node_modules/slick-carousel/slick/ajax-loader.gif')
-        .pipe(gulp.dest(path));
+gulp.task('bootstrap', function() {
 
-    // move slick fonts to the sass folder under custom themes folder
-    var kodein_sass = gulp.src('lib/sass/kodein/**/*')
-        .pipe(gulp.dest(path + '/sass'));
+    var bootstrapStyle = gulp.src(module.bootstrap + 'stylesheets/**/**/*')
+        .pipe(gulp.dest(style.vendor + 'bootstrap-plugins.sass'));
 
-    // move font_awesome fonts to themes root folder
-    var font_awesome = gulp.src('node_modules/font-awesome/fonts/**/*')
-        .pipe(gulp.dest('sneaky/wp-content/themes/fonts/'))
-
-    var bootstrap_front = gulp.src('node_modules/bootstrap-sass/assets/fonts/bootstrap/*')
-        .pipe(gulp.dest('sneaky/wp-content/themes/fonts/'))
-
-    return merge(slick_fonts, ajax_loader, kodein_sass, font_awesome, bootstrap_font);
-})
-
-// Copy env.php from wp-content to the themes folder
-gulp.task('env', function(){
-    return gulp.src('sneaky/env.php')
-    .pipe(gulp.dest(path))
+    return merge(bootstrapStyle);
 });
 
+gulp.task('font-awesome', function() {
 
-//stash test 4
-// gulp.task('default', ['sass', 'js', 'browserSync'], function() {
-//     gulp.watch('*.scss', {cwd: path + '/sass'}, ['sass']);
-//     gulp.watch('**/*.scss', {cwd: path + '/sass'}, ['sass']);
-//     gulp.watch('*.js', {cwd: path + '/js'}, ['js']);
-// });
+    //move font awesome scss to our main plugins.sass folder
+    var faStyle = gulp.src(module.fontawesome + 'scss/*')
+        .pipe(gulp.dest(style.vendor + 'font-awesome'));
+
+    //move font_awesome fonts to themes root folder
+    var faFont = gulp.src(module.fontawesome + 'fonts/**/*')
+        .pipe(gulp.dest(basePaths.root + 'fonts'));
+
+    //merge tasks
+    return merge(faStyle, faFont);
+
+});
+
+gulp.task('slicky', function() {
+
+    // move slick fonts to the fonts under our themes folder
+    var slickFont = gulp.src(module.slick + 'fonts/*')
+        .pipe(gulp.dest('./fonts'));
+
+    var slickStyle = gulp.src([
+            module.slick + 'slick.scss',
+            module.slick + 'slick-theme.scss'
+        ])
+        .pipe(gulp.dest(style.vendor + 'slick'));
+
+    // move ajax loader to custom themes folder
+    var slickAjaxLoader = gulp.src(module.slick + 'ajax-loader.gif')
+        .pipe(gulp.dest(basePaths.root));
+
+    //merge tasks
+    return merge(slickFont, slickStyle, slickAjaxLoader);
+
+});
+
+gulp.task('utility', ['bootstrap', 'slicky', 'font-awesome']);
+
+/* ========================================================
+ * Default Tasks
+ * ======================================================== */
+
+gulp.task('default', ['style', 'js', 'browserSync'], function() {
+
+    gulp.watch('**/*.scss', { cwd: 'sass/' }, ['style']);
+    gulp.watch('**/*.js', { cwd: 'js/' }, ['js']);
+});
+
+/* ========================================================
+ * Production Tasks
+ * ======================================================== */
+
+gulp.task('prod-style', function() {
+    return gulp.src(style.main)
+        .pipe(plugins.plumber({
+            errorHandler: function(err) {
+                console.log(err);
+                this.emit('end');
+            }
+        }))
+        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.sass({ outputStyle: 'compressed' }))
+        .pipe(plugins.autoprefixer())
+        .pipe(plugins.sourcemaps.write())
+        .pipe(plugins.rename('style.css'))
+        .pipe(gulp.dest(dist))
+        .pipe(reload({ stream: true }));
+});
+
+gulp.task('prod-js', function() {
+    return gulp.src(jsFiles)
+        .pipe(plugins.concat('main.min.js'))
+        .pipe(plugins.uglify())
+        .pipe(gulp.dest(dist))
+});
+
+gulp.task('setup', function() {
+    return gulp.src(filesToMove, { base: './' })
+        .pipe(gulp.dest(dist))
+})
+
+gulp.task('dist', ['prod-style', 'prod-js', 'setup']);
