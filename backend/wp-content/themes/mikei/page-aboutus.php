@@ -13,7 +13,10 @@ get_header(); ?>
 			<?php the_post_thumbnail('mainBanner_lg', array('class' => 'img-responsive fullwidth')); ?>
 		</div>
 		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-			<?php the_content(); ?>
+			<?php 
+				the_content();
+				echo 'test';
+			?>
 		<?php endwhile; endif; ?>
 
 		</main><!-- #main -->
