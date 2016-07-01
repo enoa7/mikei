@@ -1,0 +1,12 @@
+/** header **/
+
+.site-store-locator {
+    direction: rtl;
+    font-weight: bold;
+    @include spacepad(1em);
+}
+
+.site-branding {
+    position: absolute;
+    top: 0;
+}
