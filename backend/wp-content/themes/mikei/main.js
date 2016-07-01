@@ -12929,8 +12929,8 @@ return jQuery;
 
 }));
 
-(function() {
-   
+(function($) {
+
 	console.log('Zutto Iishoni!');
 
-})();
+})(jQuery);
