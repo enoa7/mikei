@@ -48,6 +48,3 @@
 	</header><!-- #masthead -->
 
 	<div id="content" class="site-content">
-
-	<p>fa test2</p>
-	<span><i class="fa fa-chevron-down"></i></span>
