@@ -4,4 +4,48 @@
 
  // @import 'quiz-personality';
 
+
+
+
+ .content-container {
+    @include spacemar(1em);
+    border: 1px solid #ddd;
+    p.lead {
+    	margin-bottom: 0;
+    }
+    //remove margins from all h* class within user-content class
+    @for $i from 1 through 3 {
+        h#{$i} {
+            margin-top: 0;
+            margin-bottom: 0.5em;
+        }
+    }
+
+    > div {
+    	@include spacepad(1em);
+    }
+}
+
+.user-menu {
+	background: $color__bg;
+	min-height: 20em;
+    .section-content.content-post-thumb {
+        @include spacepad(0.5em);
+        cursor: pointer;
+        &.active {
+        	color: $color__secondary;
+        }
+    }
+}
+
+.user-content {
+    .section-content.content-post {
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+}
+
+
  @import 'about-us';
