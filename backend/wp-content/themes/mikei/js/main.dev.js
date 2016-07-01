@@ -1,5 +1,5 @@
 (function($) {
 
-	console.log('Zutto Iishoni!');
+	console.log('Aimer');
 
 })(jQuery);
