@@ -11,21 +11,22 @@ var reload = browserSync.reload;
 // base paths for the project
 var basePaths = {
     root: './',
+    themeRoot: './backend/wp-content/themes/',
     theme: './backend/wp-content/themes/mikei/',
     npm: './node_modules/'
 }
 
 // paths for the css/scss
 var style = {
-    main: basePaths.style + 'style.scss',
-    vendor: basePaths.style + 'vendor/'
+    main: basePaths.theme + 'sass/style.scss',
+    vendor: basePaths.theme + 'sass/vendor/'
 }
 
 // paths for npm modules
 var module = {
     slick: basePaths.npm + 'slick-carousel/slick/',
-    fontawesome: basePaths.npm + 'slick-carousel/font-awesome/',
-    bootstrap: basePaths.npm + 'bootstrap-plugins.sass/assets/'
+    fontawesome: basePaths.npm + '/font-awesome/',
+    bootstrap: basePaths.npm + 'bootstrap-sass/assets/'
 }
 
 // paths for the dist folder
@@ -44,7 +45,7 @@ var jsFiles = [
     basePaths.npm + 'jquery/dist/jquery.js',
     basePaths.npm + 'fastclick/lib/*.js',
     module.slick + 'slick.js',
-    'js/main.js'
+    basePaths.theme + 'js/main.dev.js'
 ]
 /* ========================================================
  * Tasks with Browser Sync
@@ -64,7 +65,7 @@ gulp.task('browserSync', function() {
 });
 
 gulp.task('style', function() {
-    return gulp.src(basePaths.style + '/*.scss')
+    return gulp.src(style.main)
         .pipe(plugins.plumber({
             errorHandler: function(err) {
                 console.log(err);
@@ -95,7 +96,7 @@ gulp.task('js', function() {
 gulp.task('bootstrap', function() {
 
     var bootstrapStyle = gulp.src(module.bootstrap + 'stylesheets/**/**/*')
-        .pipe(gulp.dest(style.vendor + 'bootstrap-plugins.sass'));
+        .pipe(gulp.dest(style.vendor + 'bootstrap-sass'));
 
     return merge(bootstrapStyle);
 });
@@ -108,7 +109,7 @@ gulp.task('font-awesome', function() {
 
     //move font_awesome fonts to themes root folder
     var faFont = gulp.src(module.fontawesome + 'fonts/**/*')
-        .pipe(gulp.dest(basePaths.root + 'fonts'));
+        .pipe(gulp.dest(basePaths.themeRoot + 'fonts'));
 
     //merge tasks
     return merge(faStyle, faFont);
@@ -119,7 +120,7 @@ gulp.task('slicky', function() {
 
     // move slick fonts to the fonts under our themes folder
     var slickFont = gulp.src(module.slick + 'fonts/*')
-        .pipe(gulp.dest('./fonts'));
+        .pipe(gulp.dest(basePaths.theme + 'fonts'));
 
     var slickStyle = gulp.src([
             module.slick + 'slick.scss',
@@ -129,7 +130,7 @@ gulp.task('slicky', function() {
 
     // move ajax loader to custom themes folder
     var slickAjaxLoader = gulp.src(module.slick + 'ajax-loader.gif')
-        .pipe(gulp.dest(basePaths.root));
+        .pipe(gulp.dest(basePaths.theme));
 
     //merge tasks
     return merge(slickFont, slickStyle, slickAjaxLoader);
@@ -144,8 +145,8 @@ gulp.task('utility', ['bootstrap', 'slicky', 'font-awesome']);
 
 gulp.task('default', ['style', 'js', 'browserSync'], function() {
 
-    gulp.watch('**/*.scss', { cwd: 'sass/' }, ['style']);
-    gulp.watch('**/*.js', { cwd: 'js/' }, ['js']);
+    gulp.watch('**/*.scss', { cwd: basePaths.theme + 'sass/' }, ['style']);
+    gulp.watch('**/*.js', { cwd: basePaths.theme + 'js/' }, ['js']);
 });
 
 /* ========================================================
