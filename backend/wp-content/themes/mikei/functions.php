@@ -7,6 +7,8 @@
  * @package mikei
  */
 
+include 'inc/component/Article.class.php';
+
 if ( ! function_exists( 'mikei_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -150,4 +152,15 @@ add_image_size( 'mainBanner_lg', 1200, 800, hard);
 add_image_size( 'mainBanner_xs', 600, 600, true);
 add_image_size( 'thumb', 600, 350, hard);
 
+/* ==================================================================
+ * Add the_slug() function
+ * ================================================================== */
+function the_slug($echo=true){
+  $slug = basename(get_permalink());
+  do_action('before_slug', $slug);
+  $slug = apply_filters('slug_filter', $slug);
+  if( $echo ) echo $slug;
+  do_action('after_slug', $slug);
+  return $slug;
+}
 
