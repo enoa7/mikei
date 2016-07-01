@@ -140,3 +140,14 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+
+
+/* ==================================================================
+ * Additional Image Sizes
+ * ================================================================== */
+add_image_size( 'mainBanner_lg', 1200, 800, hard);
+// add_image_size( 'mainBanner_md', 992, 400, true);
+add_image_size( 'mainBanner_xs', 600, 600, true);
+add_image_size( 'thumb', 600, 350, hard);
+
+
