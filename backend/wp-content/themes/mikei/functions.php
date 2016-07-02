@@ -178,8 +178,8 @@ function mainGallery() {
 	    
 	    foreach ( $attachments as $attachment ) {
 			$class = "post-attachment item-banner mime-" . sanitize_title( $attachment->post_mime_type );
-			$mobile = wp_get_attachment_link( $attachment->ID, 'mainBanner_xs', true);
-			$desktop = wp_get_attachment_link( $attachment->ID, 'mainBanner_lg', true);
+			$mobile = wp_get_attachment_image( $attachment->ID, 'mainBanner_xs', true);
+			$desktop = wp_get_attachment_image( $attachment->ID, 'mainBanner_lg', true);
 
 			if(is_mobile()) {
 				echo '<div class="' . $class . ' data-design-thumbnail">' . $mobile . '</div>';

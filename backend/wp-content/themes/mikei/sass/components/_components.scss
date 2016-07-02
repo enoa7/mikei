@@ -6,3 +6,24 @@
 @import "forms/forms";
 @import "media/media";
 @import "modules/modules";
+.slick-prev:before,
+.slick-next:before {
+    color: $color__primary;
+}
+
+$loc: -1em;
+.slick-arrow {
+    position: absolute;
+    top: 45%;
+    font-size: 2em;
+    cursor: pointer;
+    @include breakpoint(xs) {
+        display: none;
+    }
+    &.next {
+        right: $loc;
+    }
+    &.prev {
+        left: $loc;
+    }
+}
