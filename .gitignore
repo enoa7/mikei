@@ -4,3 +4,4 @@ node_modules/
 *.zip
 env.php
 .DS_Store
+src/
