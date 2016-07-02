@@ -164,6 +164,9 @@ function the_slug($echo=true){
   return $slug;
 }
 
+/* ==================================================================
+ * Main Gallery
+ * ================================================================== */
 function mainGallery() {
 
 	global $post;
@@ -192,4 +195,37 @@ function mainGallery() {
 	}
 
 	wp_reset_postdata();
+}
+
+/* ==================================================================
+ * Get Articles
+ * ================================================================== */
+
+function get_article() {
+
+	// WP_Query arguments
+	$args = array (
+		'post_status'            => array( 'publish' ),
+		'category_name'          => 'article',
+		'posts_per_page'         => '1',
+		'order'                  => 'ASC',
+	);
+
+	// The Query
+	$article = new WP_Query( $args );
+
+	// The Loop
+	if ( $article->have_posts() ) {
+		while ( $article->have_posts() ) {
+			$article->the_post();
+			// do something
+			get_template_part('template-parts/content', 'post-list');
+		}
+	} else {
+		// no posts found
+	}
+
+	// Restore original Post Data
+	wp_reset_postdata();
+
 }

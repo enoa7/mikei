@@ -12,7 +12,11 @@ get_header(); ?>
 			<div class="banner main-banner">
 				<?php  mainGallery(); ?>
 			</div>
-			<div class="content-container clearfix">
+			<div class="clearfix">
+				<section class="list col-xs-12 col-sm-8 content-container ">
+					<?php get_article(); ?>
+				</section>
+				<aside class="extra col-xs-12 col-sm-3"></aside>
 			</div>
 			
 		</main><!-- #main -->
