@@ -44,7 +44,6 @@
             nextArrow: '<div class="slick-arrow next"><i class="fa fa-chevron-right"></div>',
             prevArrow: '<div class="slick-arrow prev"><i class="fa fa-chevron-left"></div>',
             responsive: [{
-					{
                     breakpoint: 480,
                     settings: {
                         arrows: false
