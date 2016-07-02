@@ -22,6 +22,7 @@ class ArticlePost {
 
 		$args = array (
 			'cat' => $cat,
+			'order'	=> 'ASC'
 		);
 
 		// The Query
