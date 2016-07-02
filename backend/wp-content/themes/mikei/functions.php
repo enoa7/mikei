@@ -164,3 +164,32 @@ function the_slug($echo=true){
   return $slug;
 }
 
+function mainGallery() {
+
+	global $post;
+
+	$attachments = get_posts(array( 
+	    'post_type' => 'attachment',
+	    'numberposts' => -1,
+	    'post_status' =>'any',
+	    'post_parent' => $post->ID
+	));
+	if ($attachments) {
+	    
+	    foreach ( $attachments as $attachment ) {
+			$class = "post-attachment item-banner mime-" . sanitize_title( $attachment->post_mime_type );
+			$mobile = wp_get_attachment_link( $attachment->ID, 'mainBanner_xs', true);
+			$desktop = wp_get_attachment_link( $attachment->ID, 'mainBanner_lg', true);
+
+			if(is_mobile()) {
+				echo '<div class="' . $class . ' data-design-thumbnail">' . $mobile . '</div>';
+			} else {
+				echo '<div class="' . $class . ' data-design-thumbnail">' . $desktop . '</div>';
+			}
+			
+		}
+
+	}
+
+	wp_reset_postdata();
+}

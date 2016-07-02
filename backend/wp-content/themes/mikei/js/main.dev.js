@@ -25,7 +25,6 @@ var Page = {
 
 		var selectMenu = Page.config.subMenu;
 		
-
 		$(selectMenu).click(function(){
 
 			$(this).addClass('active').siblings().removeClass('active');
@@ -40,7 +39,7 @@ var Page = {
 	$(document).ready(function(){
 
 		Page.start();
-
+		$('.banner.main-banner').slick();
 
 	});
 
