@@ -8,3 +8,7 @@
  	}
  }
  
+ .extra {
+ 	@extend .content-container;
+ 	border: none;
+ }
