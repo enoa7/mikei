@@ -16,6 +16,7 @@
             @include transition(.2s);
             &:hover {
                 background: $color__secondary;
+                color: #fff;
             }
         }
     }

@@ -18,7 +18,11 @@ a {
 }
 
 %link {
+    color: $color__reg;
+    display: block;
+    @include transition(.2s);
     &:hover {
         text-decoration: none;
+        color: $color__secondary;
     }
 }

@@ -61,7 +61,7 @@ gulp.task('browserSync', function() {
     ];
 
     browserSync.init(files, {
-        proxy: "http://localhost/mikei",
+        proxy: "http://localhost:8888/mikei",
         notify: 'false'
     });
 });
