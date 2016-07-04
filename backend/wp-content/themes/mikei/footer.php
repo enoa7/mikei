@@ -14,8 +14,15 @@
 	</div><!-- #content -->
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
-		<div class="site-info">
-			
+		<hr>
+		<div class="site-info clearfix">
+			<div class="pull-left no-spacepad-side">
+				<?php dynamic_sidebar( 'footer' ); ?>	
+			</div>
+			<div class="pull-right no-spacepad-side">
+				<i class="fa fa-copyright"></i>
+				<span>Copyright Mikei 2016</span>
+			</div>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
