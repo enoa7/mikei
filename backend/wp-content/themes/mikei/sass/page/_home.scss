@@ -1,0 +1,14 @@
+/*
+ *  Page - Home Styling
+ */
+
+ .item-banner {
+ 	img {
+ 		@extend .fullwidth;
+ 	}
+ }
+ 
+ .extra {
+ 	@extend .content-container;
+ 	border: none;
+ }

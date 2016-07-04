@@ -1,5 +1,8 @@
 /** header **/
 
+.site-header {
+	position: relative;
+}
 .site-store-locator {
     direction: rtl;
     font-weight: bold;
@@ -9,4 +12,6 @@
 .site-branding {
     position: absolute;
     top: 0;
+    left: -2em;
+    z-index: 99;
 }

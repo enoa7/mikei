@@ -1,0 +1,22 @@
+.list {
+    .item-list {
+        position: relative;
+        @include spacepad-side(1em);
+    }
+    .item-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        a {
+        	@extend %link;
+            color: #fff;
+            padding: 1em;
+            display: block;
+            background: lighten($color__secondary, 10%);
+            @include transition(.2s);
+            &:hover {
+                background: $color__secondary;
+            }
+        }
+    }
+}

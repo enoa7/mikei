@@ -99,11 +99,13 @@
         li {
             float: left;
             a {
+                color: #fff;
                 padding: 1em;
                 display: block;
                 @include transition(.2s);
                 &:hover {
                     text-decoration: none !important;
+                    color: $color__secondary;
                 }
             }
         }

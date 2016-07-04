@@ -21,7 +21,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-<div id="page" class="site container">
+<div id="page" class="site <?php echo (!is_mobile() ? 'container' : '')?>">
 	<a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'mikei' ); ?></a>
 
 	<header id="masthead" class="site-header" role="banner">

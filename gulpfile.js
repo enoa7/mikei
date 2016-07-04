@@ -26,7 +26,8 @@ var style = {
 var module = {
     slick: basePaths.npm + 'slick-carousel/slick/',
     fontawesome: basePaths.npm + '/font-awesome/',
-    bootstrap: basePaths.npm + 'bootstrap-sass/assets/'
+    bootstrap: basePaths.npm + 'bootstrap-sass/assets/',
+    matchHeight: basePaths.npm + 'jquery-match-height/dist/',
 }
 
 // paths for the dist folder
@@ -44,6 +45,7 @@ var filesToMove = [
 var jsFiles = [
     basePaths.npm + 'jquery/dist/jquery.js',
     basePaths.npm + 'fastclick/lib/*.js',
+    module.matchHeight + 'jquery.matchHeight.js',
     module.slick + 'slick.js',
     basePaths.theme + 'js/main.dev.js'
 ]

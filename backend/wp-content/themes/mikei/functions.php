@@ -164,3 +164,68 @@ function the_slug($echo=true){
   return $slug;
 }
 
+/* ==================================================================
+ * Main Gallery
+ * ================================================================== */
+function mainGallery() {
+
+	global $post;
+
+	$attachments = get_posts(array( 
+	    'post_type' => 'attachment',
+	    'numberposts' => -1,
+	    'post_status' =>'any',
+	    'post_parent' => $post->ID
+	));
+	if ($attachments) {
+	    
+	    foreach ( $attachments as $attachment ) {
+			$class = "post-attachment item-banner mime-" . sanitize_title( $attachment->post_mime_type );
+			$mobile = wp_get_attachment_image( $attachment->ID, 'mainBanner_xs', true);
+			$desktop = wp_get_attachment_image( $attachment->ID, 'mainBanner_lg', true);
+
+			if(is_mobile()) {
+				echo '<div class="' . $class . ' data-design-thumbnail">' . $mobile . '</div>';
+			} else {
+				echo '<div class="' . $class . ' data-design-thumbnail">' . $desktop . '</div>';
+			}
+			
+		}
+
+	}
+
+	wp_reset_postdata();
+}
+
+/* ==================================================================
+ * Get Articles
+ * ================================================================== */
+
+function get_article() {
+
+	// WP_Query arguments
+	$args = array (
+		'post_status'            => array( 'publish' ),
+		'category_name'          => 'article',
+		'posts_per_page'         => '1',
+		'order'                  => 'ASC',
+	);
+
+	// The Query
+	$article = new WP_Query( $args );
+
+	// The Loop
+	if ( $article->have_posts() ) {
+		while ( $article->have_posts() ) {
+			$article->the_post();
+			// do something
+			get_template_part('template-parts/content', 'post-list');
+		}
+	} else {
+		// no posts found
+	}
+
+	// Restore original Post Data
+	wp_reset_postdata();
+
+}

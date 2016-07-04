@@ -2,16 +2,11 @@
  *  Contains page-specific styling, if necessary
  */
 
- // @import 'quiz-personality';
-
-
-
-
- .content-container {
+.content-container {
     @include spacemar(1em);
     border: 1px solid #ddd;
     p.lead {
-    	margin-bottom: 0;
+        margin-bottom: 0;
     }
     //remove margins from all h* class within user-content class
     @for $i from 1 through 3 {
@@ -20,20 +15,22 @@
             margin-bottom: 0.5em;
         }
     }
-
     > div {
-    	@include spacepad(1em);
+        @include spacepad(1em);
     }
 }
 
 .user-menu {
-	background: $color__bg;
-	min-height: 20em;
+    background: $color__bg;
+    min-height: 20em;
+    height: 100%;
     .section-content.content-post-thumb {
         @include spacepad(0.5em);
         cursor: pointer;
         &.active {
-        	color: $color__secondary;
+            .section-title {
+                color: $color__secondary;
+            }
         }
     }
 }
@@ -47,5 +44,5 @@
     }
 }
 
-
- @import 'about-us';
+@import 'home';
+@import 'about-us';
