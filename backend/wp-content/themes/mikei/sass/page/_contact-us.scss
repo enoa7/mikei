@@ -1,0 +1,13 @@
+/*
+ *  Page - Contact Us Styling
+ */
+
+.aboutus {
+	.gmap {
+		iframe {
+			width: 100%;
+			height: 600px;
+			pointer-events: none;
+		}
+	}
+}
