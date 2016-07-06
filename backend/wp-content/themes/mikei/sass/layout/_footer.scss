@@ -1,0 +1,21 @@
+/** Footer **/
+
+footer {
+	margin-bottom: 1em;
+}
+.widget {
+    ul {
+        @extend .nodots;
+        li {
+            float: left;
+            @include spacepad-side(15px);
+            a {
+                @extend %link;
+            }
+        }
+    }
+}
+
+.widget-title {
+    display: none;
+}
