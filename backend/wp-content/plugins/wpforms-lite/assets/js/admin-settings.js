@@ -44,6 +44,10 @@
 				s.tabs_nav.find('a[href="' + s.tabs_hash_sani + '"]').addClass('wpforms-active nav-tab-active');
 				s.tabs.find(s.tabs_hash_sani).addClass('wpforms-active').show();
 			}
+			$('.wpforms-circle-loader').fadeOut('fast', function() {
+				$('#wpforms-tabs').fadeIn('fast');
+				$('.wpforms-circle-loader').remove();
+			});
 		},
 
 		/**

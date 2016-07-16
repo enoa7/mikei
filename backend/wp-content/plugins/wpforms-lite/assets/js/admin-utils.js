@@ -12,7 +12,7 @@ var wpf = {
 
 		wpf.bindUIActions();
 
-		jQuery(document).ready(wpf.ready());
+		jQuery(document).ready(wpf.ready);
 	},
 
 	/**

@@ -160,6 +160,18 @@ Syed Balkhi
 
 == Changelog ==
 
+= 1.2.4.1 =
+- Fixed: Plugin settings page not correctly showing
+
+= 1.2.4 =
+- Added: Additional logging and error reporting
+- Changed: Footer asset detection priority, for improved capatibility with other services
+- Changed: Refactored and refined front-end javascript
+- Fixed: Rogue PHP notices
+
+= 1.2.3.2 =
+- Fixed: Default field validation considered 0 as empty
+
 = 1.2.3.1 =
 - Fixed: Blank form email notification defaults
 

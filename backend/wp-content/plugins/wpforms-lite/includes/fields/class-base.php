@@ -566,7 +566,7 @@ abstract class WPForms_Field {
 	public function validate( $field_id, $field_submit, $form_data ) {
 
 		// Basic required check - If field is marked as required, check for entry data
-		if ( !empty( $form_data['fields'][$field_id]['required'] ) && empty( $field_submit ) ) {
+		if ( !empty( $form_data['fields'][$field_id]['required'] ) && empty( $field_submit ) && '0' != $field_submit ) {
 
 			wpforms()->process->errors[$form_data['id']][$field_id] = apply_filters( 'wpforms_required_label', __( 'This field is required', 'wpforms' ) );
 		}

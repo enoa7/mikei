@@ -83,7 +83,7 @@ class WPForms_WP_Emails {
 	 *
 	 * @since 1.2.3
 	 */
-	private $entry_id = '';
+	public $entry_id = '';
 
 	/**
 	 * Get things going.

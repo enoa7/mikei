@@ -145,12 +145,16 @@ function wpforms_panel_field( $option, $panel, $field, $form_data, $label, $args
 			if ( !empty( $args['field_map'] ) ) {
 				$options = array();
 				$available_fields = wpforms_get_form_fields( $form_data, $args['field_map']  );
+				if ( !empty( $available_fields ) ) {
 				foreach ( $available_fields as $id => $available_field ) {
 					$lbl = !empty( $available_field['label'] ) ? esc_attr( $available_field['label'] ) : __( 'Field #') . $id;
 					$options[$id] = $lbl;
-				}
+				} }
 				$input_class .= ' wpforms-field-map-select';
 				$data_attr   .= ' data-field-map-allowed="' . implode( ' ', $args['field_map'] ) . '"';
+				if ( !empty( $placeholder ) ) {
+					$data_attr .= ' data-field-map-placeholder="' . esc_attr( $placeholder ) . '"';
+				}
 			} else {
 				$options = $args['options'];
 			}
@@ -163,6 +167,7 @@ function wpforms_panel_field( $option, $panel, $field, $form_data, $label, $args
 				$input_class,
 				$data_attr
 			);
+
 				if ( !empty( $placeholder ) ) {
 					$output .= '<option value="">' . $placeholder . '</option>';
 				}
@@ -170,6 +175,7 @@ function wpforms_panel_field( $option, $panel, $field, $form_data, $label, $args
 				foreach ( $options as $key => $option ) {
 					$output .= sprintf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $key, $value, false ), $option );
 				}
+
 			$output .= '</select>';
 			break;
 	}

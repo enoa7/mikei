@@ -169,6 +169,7 @@ class WPForms_Settings {
 					$this->options['email-template']       = !empty( $_POST['email-template'] ) ? esc_attr( $_POST['email-template'] ) : 'default';
 					$this->options['email-header-image']   = !empty( $_POST['email-header-image'] ) ? esc_url_raw( $_POST['email-header-image'] ) : '';
 					$this->options['disable-css']          = !empty( $_POST['disable-css'] ) ? intval( $_POST['disable-css'] ) : '1';
+					$this->options['global-assets']        = !empty( $_POST['global-assets'] ) ? '1' : false;
 					$this->options['recaptcha-site-key']   = !empty( $_POST['recaptcha-site-key'] ) ? esc_html( $_POST['recaptcha-site-key'] ) : '';
 					$this->options['recaptcha-secret-key'] = !empty( $_POST['recaptcha-secret-key'] ) ? esc_html( $_POST['recaptcha-secret-key'] ) : '';
 					$this->options = apply_filters( 'wpforms_settings_save', $this->options, $_POST, 'general' );
@@ -220,6 +221,15 @@ class WPForms_Settings {
 									<option value="none" <?php selected( 'none', $this->get( 'email-template' ) ); ?>><?php _e( 'Plain Text', 'wpforms' ); ?></option>
 								</select>
 								<p class="description"><?php _e( 'Determines how email notifications will be formatted.', 'wpforms' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="wpforms-settings-general-global-assets"><?php _e( 'Load Assets Globally', 'wpforms' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" name="global-assets" id="wpforms-settings-general-global-assets" value="1" <?php checked( '1', $this->get( 'global-assets' ) ); ?>>
+								<label for="wpforms-settings-general-global-assets"><?php _e( 'Check this if you would like to load WPForms assets site-wide. Only check if your site is having compatibility issues or instructed to by support.', 'wpforms_paypals' ); ?></label>
 							</td>
 						</tr>
 						<tr>
@@ -302,6 +312,23 @@ class WPForms_Settings {
 
 		?>
 		<div id="wpforms-settings" class="wrap">
+
+			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+
+			<div class="wpforms-circle-loader">
+				<div class="wpforms-circle-1 wpforms-circle"></div>
+				<div class="wpforms-circle-2 wpforms-circle"></div>
+				<div class="wpforms-circle-3 wpforms-circle"></div>
+				<div class="wpforms-circle-4 wpforms-circle"></div>
+				<div class="wpforms-circle-5 wpforms-circle"></div>
+				<div class="wpforms-circle-6 wpforms-circle"></div>
+				<div class="wpforms-circle-7 wpforms-circle"></div>
+				<div class="wpforms-circle-8 wpforms-circle"></div>
+				<div class="wpforms-circle-9 wpforms-circle"></div>
+				<div class="wpforms-circle-10 wpforms-circle"></div>
+				<div class="wpforms-circle-11 wpforms-circle"></div>
+				<div class="wpforms-circle-12 wpforms-circle"></div>
+			</div>
 
 			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 			

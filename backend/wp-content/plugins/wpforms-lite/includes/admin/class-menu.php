@@ -18,7 +18,7 @@ class WPForms_Admin_Menu {
 	public function __construct() {
 
 		// Let's make some menus
-		add_action( 'admin_menu',            array( $this, 'register_menus' )       );
+		add_action( 'admin_menu',            array( $this, 'register_menus' ), 9    );
 		add_action( 'admin_enqueue_scripts', array( $this, 'menu_icon'      )       );
 
 		// Footer text

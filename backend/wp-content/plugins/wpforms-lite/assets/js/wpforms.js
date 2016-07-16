@@ -1,160 +1,265 @@
-;(function($){
-	$(function(){
+;(function($) {
+
+	var WPForms = {
 
 		/**
-		 * Validation
+		 * Start the engine.
+		 *
+		 * @since 1.2.3
 		 */
-		if(typeof $.fn.validate !== 'undefined') { 
+		init: function() {
 
-			// Validate method for Credit Card Number
-			if(typeof $.fn.payment !== 'undefined') { 
-			$.validator.addMethod( "creditcard", function( value, element ) {
-				//var type  = $.payment.cardType(value);
-				var valid = $.payment.validateCardNumber(value);
-				return this.optional( element ) || valid;
-			}, "Please enter a valid credit card number." );
-			// @todo validate CVC and expiration
-			}
+			// Document ready
+			$(document).ready(WPForms.ready);
 
-			// Validate method for currency
-			// @link https://github.com/jzaefferer/jquery-validation/blob/master/src/additional/currency.js
-			$.validator.addMethod( "currency", function( value, element, param ) {
-				var isParamString = typeof param === "string",
-					symbol = isParamString ? param : param[ 0 ],
-					soft = isParamString ? true : param[ 1 ],
-					regex;
+			// Page load
+			$(window).on('load', WPForms.load);
 
-				symbol = symbol.replace( /,/g, "" );
-				symbol = soft ? symbol + "]" : symbol + "]?";
-				regex = "^[" + symbol + "([1-9]{1}[0-9]{0,2}(\\,[0-9]{3})*(\\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\\.[0-9]{0,2})?|0(\\.[0-9]{0,2})?|(\\.[0-9]{1,2})?)$";
-				regex = new RegExp( regex );
-				return this.optional( element ) || regex.test( value );
-			}, "Please use a valid currency format" );
+			WPForms.bindUIActions();
+		},
 
-			// Validate method for file extensions
-			$.validator.addMethod( "extension", function( value, element, param ) {
-				param = typeof param === "string" ? param.replace( /,/g, "|" ) : "png|jpe?g|gif";
-				return this.optional( element ) || value.match( new RegExp( "\\.(" + param + ")$", "i" ) );
-			}, $.validator.format( "File type is not allowed" ) );
+		/**
+		 * Document ready.
+		 *
+		 * @since 1.2.3
+		 */
+		ready: function() {
 
-			// Validate method for file size
-			// @link https://github.com/jzaefferer/jquery-validation/pull/1512
-			$.validator.addMethod("maxsize", function(value, element, param) {
-				var maxSize = param,
-					optionalValue = this.optional(element),
-					i, len, file;
-				if (optionalValue) {
-					return optionalValue;
+			// Payments: Update Total field(s) with latest calculation
+			$('.wpforms-payment-total').each(function(index, el) {
+				WPForms.calculateTotalUpdate(this);
+			})
+
+			WPForms.loadValidation();
+			WPForms.loadDatePicker();
+			WPForms.loadTimePicker();
+			WPForms.loadInputMask();
+			WPForms.loadCreditCardValidation();
+		},
+
+		/**
+		 * Page load.
+		 *
+		 * @since 1.2.3
+		 */
+		load: function() {
+
+		},
+
+		//--------------------------------------------------------------------//
+		// Initializing
+		//--------------------------------------------------------------------//
+
+		/**
+		 * Load jQuery Validation.
+		 *
+		 * @since 1.2.3
+		 */
+		loadValidation: function() {
+
+			// Only load if jQuery validation library exists
+			if (typeof $.fn.validate !== 'undefined') { 
+
+				// Payments: Validate method for Credit Card Number
+				if(typeof $.fn.payment !== 'undefined') { 
+					$.validator.addMethod( "creditcard", function(value, element) {
+						//var type  = $.payment.cardType(value);
+						var valid = $.payment.validateCardNumber(value);
+						return this.optional(element) || valid;
+					}, "Please enter a valid credit card number.");
+					// @todo validate CVC and expiration
 				}
-				if (element.files && element.files.length) {
-					i = 0;
-					len = element.files.length;
-					for (; i < len; i++) {
-						file = element.files[i];
-						if (file.size > maxSize) {
-							return false;
-						}
+
+				// Payments: Validate method for currency
+				// @link https://github.com/jzaefferer/jquery-validation/blob/master/src/additional/currency.js
+				$.validator.addMethod( "currency", function(value, element, param) {
+					var isParamString = typeof param === "string",
+						symbol = isParamString ? param : param[0],
+						soft = isParamString ? true : param[1],
+						regex;
+					symbol = symbol.replace( /,/g, "" );
+					symbol = soft ? symbol + "]" : symbol + "]?";
+					regex = "^[" + symbol + "([1-9]{1}[0-9]{0,2}(\\,[0-9]{3})*(\\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\\.[0-9]{0,2})?|0(\\.[0-9]{0,2})?|(\\.[0-9]{1,2})?)$";
+					regex = new RegExp(regex);
+					return this.optional(element) || regex.test(value);
+				}, "Please use a valid currency format");
+
+				// Validate method for file extensions
+				$.validator.addMethod( "extension", function(value, element, param) {
+					param = typeof param === "string" ? param.replace( /,/g, "|" ) : "png|jpe?g|gif";
+					return this.optional(element) || value.match( new RegExp( "\\.(" + param + ")$", "i" ) );
+				}, $.validator.format("File type is not allowed") );
+
+				// Validate method for file size
+				// @link https://github.com/jzaefferer/jquery-validation/pull/1512
+				$.validator.addMethod("maxsize", function(value, element, param) {
+					var maxSize = param,
+						optionalValue = this.optional(element),
+						i, len, file;
+					if (optionalValue) {
+						return optionalValue;
 					}
-				}
-				return true;
-			}, $.validator.format("File exceeds max size allowed"));
-
-			$('.wpforms-validate').each(function() {
-				var form = $(this);
-				var form_id = form.data('formid');
-
-				if (typeof window['wpforms_'+form_id] != "undefined" && window['wpforms_'+id].hasOwnProperty('validate') ) {	
-					properties = window['wpforms_'+id].validate;
-				} else if ( typeof wpforms_validate != "undefined") {
-					properties = wpforms_validate;
-				} else {
-					properties = {
-						errorClass: 'wpforms-error',
-						validClass: 'wpforms-valid',
-						errorPlacement: function(error, element) {
-							if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox' ) {
-								element.parent().parent().parent().append(error);
-							} else {
-								error.insertAfter(element);
+					if (element.files && element.files.length) {
+						i = 0;
+						len = element.files.length;
+						for (; i < len; i++) {
+							file = element.files[i];
+							if (file.size > maxSize) {
+								return false;
 							}
 						}
 					}
-				}
-				form.validate( properties );
-			});
-		}
+					return true;
+				}, $.validator.format("File exceeds max size allowed"));
 
-		/**
-		 * Date picker
-		 */
-		if(typeof $.fn.pickadate !== 'undefined') { 
-			$('.wpforms-datepicker').each(function() {
-				var element = $(this);
-				var form = element.closest('.wpforms-form');
-				var form_id = form.data('formid');
+				// Finally load jQuery Validation library for our forms
+				$('.wpforms-validate').each(function() {
+					var form   = $(this),
+						formID = form.data('formid');
 
-				if (typeof window['wpforms_'+form_id] != "undefined" && window['wpforms_'+id].hasOwnProperty('pickadate') ) {	
-					properties = window['wpforms_'+id].pickadate;
-				} else if ( typeof wpforms_pickadate != "undefined") {
-					properties = wpforms_pickadate;
-				} else {
-					properties = {
-						today: false,
-						clear: false,
-						close: false,
-						format: element.data('format')
+					if (typeof window['wpforms_'+formID] != "undefined" && window['wpforms_'+id].hasOwnProperty('validate')) {	
+						properties = window['wpforms_'+id].validate;
+					} else if ( typeof wpforms_validate != "undefined") {
+						properties = wpforms_validate;
+					} else {
+						properties = {
+							errorClass: 'wpforms-error',
+							validClass: 'wpforms-valid',
+							errorPlacement: function(error, element) {
+								if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox' ) {
+									element.parent().parent().parent().append(error);
+								} else {
+									error.insertAfter(element);
+								}
+							}
+						}
 					}
-				}
-				element.pickadate(properties)
-			});
-		};
+					form.validate( properties );
+				});
+			}
+		},
 
 		/**
-		 * Time picker
+		 * Load jQuery Date Picker.
+		 *
+		 * @since 1.2.3
 		 */
-		if(typeof $.fn.pickatime !== 'undefined') { 
-			$('.wpforms-timepicker').each(function() {
-				var element = $(this);
-				var form = $(this).closest('.wpforms-form');
-				var form_id = form.data('formid');
+		loadDatePicker: function() {
 
-				if (typeof window['wpforms_'+form_id] != "undefined" && window['wpforms_'+id].hasOwnProperty('pickatime') ) {	
-					properties = window['wpforms_'+id].pickadate;
-				} else if ( typeof wpforms_pickatime != "undefined") {
-					properties = wpforms_pickatime;
-				} else {
-					properties = {
-						clear: false,
-						format: $(this).data('format'),
-						interval: $(this).data('interval')		
+			// Only load if jQuery datepicker library exists
+			if (typeof $.fn.pickadate !== 'undefined') { 
+				$('.wpforms-datepicker').each(function() {
+					var element = $(this),
+						form    = element.closest('.wpforms-form'),
+						formID  = form.data('formid');
+
+					if (typeof window['wpforms_'+formID] != "undefined" && window['wpforms_'+id].hasOwnProperty('pickadate') ) {	
+						properties = window['wpforms_'+id].pickadate;
+					} else if ( typeof wpforms_pickadate != "undefined") {
+						properties = wpforms_pickadate;
+					} else {
+						properties = {
+							today: false,
+							clear: false,
+							close: false,
+							format: element.data('format')
+						}
 					}
-				}
-				element.pickatime(properties);
+					element.pickadate(properties)
+				});
+			};
+		},
+
+		/**
+		 * Load jQuery Time Picker.
+		 *
+		 * @since 1.2.3
+		 */
+		loadTimePicker: function() {
+
+			// Only load if jQuery timepicker library exists
+			if (typeof $.fn.pickatime !== 'undefined') { 
+				$('.wpforms-timepicker').each(function() {
+					var element = $(this),
+						form    = element.closest('.wpforms-form'),
+						formID  = form.data('formid');
+
+					if (typeof window['wpforms_'+formID] != "undefined" && window['wpforms_'+id].hasOwnProperty('pickatime') ) {	
+						properties = window['wpforms_'+id].pickadate;
+					} else if ( typeof wpforms_pickatime != "undefined") {
+						properties = wpforms_pickatime;
+					} else {
+						properties = {
+							clear: false,
+							format: element.data('format'),
+							interval: element.data('interval')		
+						}
+					}
+					element.pickatime(properties);
+				});
+			}
+		},
+
+		/**
+		 * Load jQuery input masks.
+		 *
+		 * @since 1.2.3
+		 */
+		loadInputMask: function() {
+
+			// Only load if jQuery input mask library exists
+			if (typeof $.fn.inputmask !== 'undefined') { 
+				$('.wpforms-masked-input').inputmask();
+			};
+		},
+
+		/**
+		 * Payments: Load credit card validation.
+		 *
+		 * @since 1.2.3
+		 */
+		loadCreditCardValidation: function() {
+
+			// Only load if jQuery payment library exists
+			if(typeof $.fn.payment !== 'undefined') { 
+				$('.wpforms-field-credit-card-cardnumber').payment('formatCardNumber');
+				$('.wpforms-field-credit-card-cardcvc').payment('formatCardCVC');
+			};
+		},
+
+		//--------------------------------------------------------------------//
+		// Binds
+		//--------------------------------------------------------------------//
+
+		/**
+		 * Element bindings.
+		 *
+		 * @since 1.2.3
+		 */
+		bindUIActions: function() {
+
+			// Pagebreak navigation
+			$(document).on('click', '.wpforms-page-button', function(event) {
+				event.preventDefault();
+				WPForms.pagebreakNav($(this));
 			});
-		}
 
-		/**
-		 * Masked Input
-		 */
-		if(typeof $.fn.inputmask !== 'undefined') { 
-			$('.wpforms-masked-input').inputmask();
-		};
+			// Payments: Update Total field(s) when latest calculation.
+			$(document).on('change input', '.wpforms-payment-price', function(event) {
+				WPForms.calculateTotalUpdate(this);
+			});
 
-		/**
-		 * Credit Card
-		 */
-		if(typeof $.fn.payment !== 'undefined') { 
-			$('.wpforms-field-credit-card-cardnumber').payment('formatCardNumber');
-			$('.wpforms-field-credit-card-cardcvc').payment('formatCardCVC');
-		};
+			// OptinMonster: initialize again after OM is finished.
+			// This is to accomodate moving the form in the DOM.
+			$(document).on('OptinMonsterAfterInject', function(event) {
+				WPForms.ready();
+			});
+		},
 
-		/**
-		 * Page Break
-		 */
-		$(document).on('click', '.wpforms-page-button', function(event) {
-			event.preventDefault();
 
-			var $this      = $(this),
+		pagebreakNav: function(el) {
+
+			var $this      = $(el),
 				valid      = true,
 				action     = $this.data('action'),
 				page       = $this.data('page'),
@@ -242,52 +347,62 @@
 					}
 				}
 			}
-		});
+		},
+
+		//--------------------------------------------------------------------//
+		// Other functions
+		//--------------------------------------------------------------------//
 
 		/**
-		 * Payment Total calculation
+		 * Payments: Calculate total.
+		 *
+		 * @since 1.2.3
 		 */
-		// Calculate total
-		function calculate_total($form) {
-			var total = 0.00;
+		calculateTotal: function(el) {
+
+			var $form = $(el),
+				total = 0.00;
 			$('.wpforms-payment-price').each(function(index, el) {
 				var amount = 0,
 					$this  = $(this);
-				if ( $this.attr('type') == 'text' ) {
+				if ($this.attr('type') === 'text') {
 					amount = $this.val();
-				} else if ( $this.attr('type') == 'radio' && $this.is(':checked') ) {
+				} else if ($this.attr('type') === 'radio' && $this.is(':checked')) {
 					amount = $this.data('amount');
 				}
-				if ( amount != 0 ) {
+				if (amount != 0) {
 					amount = amount.replace(/[^0-9.]/gi,'');
 					amount = parseFloat(amount).toFixed(2).replace(/(\d)(?=(\d{6})+\.)/g, "$1,");
-					total = parseFloat(total)+parseFloat(amount);
+					total  = parseFloat(total)+parseFloat(amount);
 				}
 			});
 			return parseFloat(total).toFixed(2);
-		}
-		// Update Total field(s) with latest calculation
-		function calculate_total_update(el) {
+		},
+
+		/**
+		 * Payments: Update Total field(s) with latest calculation.
+		 *
+		 * @since 1.2.3
+		 */
+		calculateTotalUpdate: function(el) {
+
 			var $form = $(el).closest('.wpforms-form'),
-				total = calculate_total($form);
+				total = WPForms.calculateTotal($form);
 			if (isNaN(total)) {
 				total = '0.00';
 			}
 			$form.find('.wpforms-payment-total').each(function(index, el) {
-				if ( $(this).attr('type') == 'hidden' ) {
+				if ($(this).attr('type') == 'hidden') {
 					$(this).val('$'+total);
 				} else {
 					$(this).text('$'+total);
 				}
 			});
 		}
-		// Update Total fields when price changes
-		$(document).on('change input', '.wpforms-payment-price', function(event) {
-			calculate_total_update( this );
-		});
-		// Set Total field on load
-		$('.wpforms-payment-total').each(function(index, el) {
-			calculate_total_update( this );
-		})
-	});
-}(jQuery));
+	}
+
+	WPForms.init();
+
+	window.wpforms = WPForms;
+
+})(jQuery);

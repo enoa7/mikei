@@ -36,7 +36,7 @@ class WPForms_Frontend {
 		add_action( 'wpforms_frontend_output',         array( $this, 'recaptcha'      ), 20,  5 );
 		add_action( 'wpforms_frontend_output',         array( $this, 'foot'           ), 25,  5 );
 		add_action( 'wp_enqueue_scripts',              array( $this, 'assets_header'  )         );
-		add_action( 'wp_footer',                       array( $this, 'assets_footer'  )         );
+		add_action( 'wp_footer',                       array( $this, 'assets_footer'  ), 15     );
 		add_action( 'wp_footer',                       array( $this, 'footer_end'     ), 99     );
 
 		// Register shortcode
@@ -603,6 +603,18 @@ class WPForms_Frontend {
 	}
 
 	/**
+	 * Determine if we should load assets globally. If false assets will
+	 * load conditionally (default).
+	 *
+	 * @since 1.2.4
+	 * @return bool
+	 */
+	public function assets_global() {
+
+		return  apply_filters( 'wpforms_global_assets', wpforms_setting( 'global-assets', false ) );
+	}
+
+	/**
 	 * Load the necessary CSS for single pages/posts earlier if possible.
 	 *
 	 * If we are viewing a singular page, then we can check the content early
@@ -635,7 +647,7 @@ class WPForms_Frontend {
 		do_action( 'wpforms_frontend_css', $this->forms );
 
 		// jquery date/time library CSS
-		if ( true == wpforms_has_field_type( 'date-time', $this->forms, true ) ) :
+		if ( $this->assets_global() || true == wpforms_has_field_type( 'date-time', $this->forms, true ) ) :
 		wp_enqueue_style(
 			'wpforms-pickadate-core',
 			WPFORMS_PLUGIN_URL . 'assets/css/pickadate.classic.css',
@@ -694,8 +706,7 @@ class WPForms_Frontend {
 		);
 
 		// Load jquery date/time library - http://http://amsul.ca/pickadate.js/
-		//die( print_r( $this->forms ) );
-		if ( true == wpforms_has_field_type( 'date-time', $this->forms, true ) ) :
+		if ( $this->assets_global() || true == wpforms_has_field_type( 'date-time', $this->forms, true ) ) :
 		wp_enqueue_script(
 			'wpforms-pickadate-core',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.picker.js',
@@ -720,7 +731,7 @@ class WPForms_Frontend {
 		endif;
 
 		// Load jquery input mask library - https://github.com/RobinHerbots/jquery.inputmask
-		if ( true == wpforms_has_field_type( 'phone', $this->forms, true ) ) :
+		if ( $this->assets_global() || true == wpforms_has_field_type( 'phone', $this->forms, true ) ) :
 		wp_enqueue_script(
 			'wpforms-maskedinput',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.inputmask.bundle.min.js',
@@ -731,7 +742,7 @@ class WPForms_Frontend {
 		endif;
 
 		// Load CC payment library - https://github.com/stripe/jquery.payment/
-		if ( true == wpforms_has_field_type( 'credit-card', $this->forms, true ) ) :
+		if ( $this->assets_global() || true == wpforms_has_field_type( 'credit-card', $this->forms, true ) ) :
 		wp_enqueue_script(
 			'wpforms-payment',
 			WPFORMS_PLUGIN_URL . 'assets/js/jquery.payment.min.js',
@@ -801,7 +812,7 @@ class WPForms_Frontend {
 	 */
 	public function assets_footer() {
 
-		if ( empty( $this->forms ) )
+		if ( empty( $this->forms ) && ! $this->assets_global() )
 			return;
 
 		$this->assets_css();
@@ -817,7 +828,7 @@ class WPForms_Frontend {
 	 */
 	public function footer_end() {
 
-		if ( empty( $this->forms ) )
+		if ( empty( $this->forms ) && ! $this->assets_global() )
 			return;
 
 		do_action( 'wpforms_wp_footer_end', $this->forms );

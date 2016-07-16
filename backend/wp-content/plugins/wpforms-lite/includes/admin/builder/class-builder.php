@@ -306,6 +306,10 @@ class WPForms_Builder {
 		);
 		$strings = apply_filters( 'wpforms_builder_strings', $strings, $this->form );
 
+		if ( !empty( $_GET['form_id'] ) ) {
+			$strings['preview_url'] = add_query_arg( array( 'new_window' => 1 ), wpforms()->preview->form_preview_url( $_GET['form_id'] ) );
+		}
+
 		wp_localize_script(
 			'wpforms-builder',
 			'wpforms_builder',

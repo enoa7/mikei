@@ -166,7 +166,7 @@ class WPForms_Process {
 			}
 
 			// Success - add entry to database
-			$entry_id = $this->entry_save( $this->fields, '', $entry, $form_data['id'], $form_data );
+			$entry_id = $this->entry_save( $this->fields, $entry, $form_data['id'], $form_data );
 
 			// Success - send email notification
 			$this->entry_email( $this->fields, $entry, $form_data, $entry_id );
@@ -181,9 +181,8 @@ class WPForms_Process {
 			wpforms_log( 
 				'Entry', 
 				$this->fields, 
-				'entries', 
 				array( 
-					'type'    => 'entry', 
+					'type'    => array( 'entry' ), 
 					'parent'  => $entry_id, 
 					'form_id' => $form_data['id'],
 				)
@@ -198,13 +197,9 @@ class WPForms_Process {
 			// Logs spam entry depending on log levels set
 			wpforms_log( 
 				'Spam Entry', 
-				array(
-					$honeypot,
-					$entry
-				), 
-				'spam', 
+				array( $honeypot, $entry ), 
 				array( 
-					'type'    => 'spam', 
+					'type'    => array( 'spam' ), 
 					'parent'  => $entry_id, 
 					'form_id' => $form_data['id'],
 				)
@@ -342,7 +337,7 @@ class WPForms_Process {
 			// Setup email properties
 			$email['address']        = explode( ',', apply_filters( 'wpforms_process_smart_tags', $notification['email'], $form_data, $fields, $this->entry_id ) );
 			$email['address']        = array_map( 'sanitize_email', $email['address'] );
-			$email['subject']        = !empty( $notification['subject'] ) ? $notification['subject'] : __( 'New %s Entry', $form_data['settings']['form_title'] );
+			$email['subject']        = !empty( $notification['subject'] ) ? $notification['subject'] : sprintf( __( 'New %s Entry', 'wpforms ' ), $form_data['settings']['form_title'] );
 			$email['sender_address'] = !empty( $notification['sender_address'] ) ? $notification['sender_address'] : get_option( 'admin_email' );
 			$email['sender_name']    = !empty( $notification['sender_name'] ) ? $notification['sender_name'] : get_bloginfo( 'name' );
 			$email['replyto']        = !empty( $notification['replyto'] ) ? $notification['replyto'] : false;
@@ -373,9 +368,9 @@ class WPForms_Process {
 	 * @param array $entry
 	 * @param array $form_data
 	 */
-	public function entry_save( $fields, $entry_meta, $entry, $form_id, $form_data = '' ) {
+	public function entry_save( $fields, $entry, $form_id, $form_data = '' ) {
 
-		do_action( 'wpforms_process_entry_save', $fields, $entry_meta, $entry, $form_id, $form_data );
+		do_action( 'wpforms_process_entry_save', $fields, $entry, $form_id, $form_data );
 
 		return $this->entry_id;
 	}

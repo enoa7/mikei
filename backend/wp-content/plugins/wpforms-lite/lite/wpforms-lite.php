@@ -10,7 +10,7 @@ class WPForms_Lite {
 	/**
 	 * Primary class constructor.
 	 *
-	 * @since 1.2.x
+	 * @since 1.2.0
 	 */
 	public function __construct() {
 
@@ -24,124 +24,6 @@ class WPForms_Lite {
 		add_action( 'wpforms_admin_page',                  array( $this, 'entries_page'                )        );
 		add_action( 'admin_enqueue_scripts',               array( $this, 'addon_page_enqueues'         )        );
 		add_action( 'wpforms_admin_page',                  array( $this, 'addons_page'                 )        );
-		// Giveaway - 1.2.3.1
-		add_action( 'admin_notices',                       array( $this, 'giveaway_notice'             )         );
-		add_action( 'admin_init',                          array( $this, 'giveaway_notice_dismiss'     )         );
-		add_action( 'admin_menu',                          array( $this, 'giveaway_menu'               )         );
-	}
-
-	/**
-	 * Giveaway admin notice.
-	 *
-	 * @since 1.2.3.1
-	 */
-	public function giveaway_notice() {
-
-		// Only display for admins
-		if ( ! current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
-			return;
-
-		// Don't display if has been dismissed or user has been to giveaway page
-		if ( get_option( 'wpforms_giveaway_07072016', false ) )
-			return;
-
-		$dismiss  = esc_url( add_query_arg( array( 'wpforms_giveaway_dismiss' => true ) ) );
-		$giveaway = admin_url( 'admin.php?page=wpforms-giveaway' );
-		?>
-		<div class="notice wpforms-giveaway-notice">
-			<span class="dashicons dashicons-thumbs-up"></span>
-			Are you enjoying <strong>WPForms Lite</strong>? We are giving away 10 free licenses of WPForms Pro - <a href="<?php echo $giveaway; ?>">Enter the Giveaway Here</a> (It’s easy)
-			<a href="<?php echo $dismiss; ?>" class="wpforms-giveaway-dismiss"><span class="dashicons dashicons-dismiss"></span></a>
-		</div>
-		<style type="text/css">
-		.wpforms-giveaway-notice {
-			position: relative; padding: 8px 10px 8px 40px; border-left: 0;
-		}
-		.wpforms-giveaway-notice span.dashicons-thumbs-up {
-			color: white; background: #0e6cad; position: absolute; left: 0; height: 100%; top: 0; padding: 0 5px;
-		}
-		.wpforms-giveaway-notice span.dashicons-thumbs-up:before {
-			margin-top: 6px; display: inline-block;
-		}
-		.wpforms-giveaway-dismiss {
-			float: right; color: #999; text-decoration: none;
-		}
-		</style>
-	<?php
-	}
-
-	/**
-	 * Giveaway admin notice dismiss.
-	 *
-	 * @since 1.2.3.1
-	 */
-	public function giveaway_notice_dismiss() {
-
-		if ( !current_user_can( apply_filters( 'wpforms_manage_cap', 'manage_options' ) ) )
-			return;
-
-		if ( isset( $_GET[ 'wpforms_giveaway_dismiss' ] ) || ( isset( $_GET['page'] ) && 'wpforms-giveaway' == $_GET['page'] ) ) {
-			update_option( 'wpforms_giveaway_07072016', 'hide' );
-		}
-	}
-
-	/**
-	 * Giveaway menu item for settings page.
-	 *
-	 * @since 1.2.3.1
-	 */
-	public function giveaway_menu() {
-
-		add_submenu_page(
-			'wpforms-settings',
-			__( 'WPForms Giveaway', 'wpforms' ),
-			__( 'WPForms Giveaway', 'wpforms' ),
-			apply_filters( 'wpforms_manage_cap', 'manage_options' ),
-			'wpforms-giveaway',
-			array( $this, 'giveaway_page' )
-		);
-	}
-
-	/**
-	 * Giveaway settings page.
-	 *
-	 * @since 1.2.3.1
-	 */
-	public function giveaway_page() {
-		
-		// Set option once user goes to this page so they don't see the admin
-		// notice again when using the WP dashboard
-		update_option( 'wpforms_giveaway_07072016', 'hide' );
-		?>
-		<div id="wpforms-giveaway" class="wrap">
-			<img src="<?php echo WPFORMS_PLUGIN_URL; ?>assets/images/sullie.png" alt="Sullie WPForms mascot" class="sullie">
-			<h1>WPForms PRO Giveaway</h1>
-			<p>Thank you for using WPForms Lite. This week, we're giving away 10 Pro accounts of WPForms ($199 value each).</p>
-			<p>** Winners will be announced on Wednesday, July 6th **</p>
-			<p>Enter the giveaway below:</p>
-			<a class="rcptr" href="http://www.rafflecopter.com/rafl/display/2ec3ed916/" rel="nofollow" data-raflid="2ec3ed916" data-theme="classic" data-template="" id="rcwidget_oaxpe87z">a Rafflecopter giveaway</a>
-			<script src="https://widget-prime.rafflecopter.com/launch.js"></script>
-		</div>
-		<style type="text/css">
-			#wpforms-giveaway  {
-				max-width: 800px;
-			}
-			#wpforms-giveaway .sullie {
-				float:right;
-				max-width:180px;
-				margin:20px 0 0 30px;
-			}
-			#wpforms-giveaway  h1 {
-				font-size: 30px;
-				margin: 0 0 26px 0;
-			}
-			#wpforms-giveaway p {
-				font-size: 18px;
-				margin: 0 0 24px 0;
-				max-width: 540px;
-			}
-		</style>
-		<?php
 	}
 
 	/**

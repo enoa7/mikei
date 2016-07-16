@@ -21,14 +21,10 @@
 			s = this.settings;
 
 			// Document ready
-			$(document).ready(function() {
-				WPFormsBuilder.ready();
-			});
+			$(document).ready(WPFormsBuilder.ready);
 
 			// Page load
-			$(window).on('load', function() {
-				WPFormsBuilder.load();
-			});
+			$(window).on('load', WPFormsBuilder.load);
 
 			WPFormsBuilder.bindUIActions();
 		},
@@ -126,6 +122,9 @@
 
 			// Notification settings
 			WPFormsBuilder.notificationToggle();
+
+			// Secret preview hotkey
+			WPFormsBuilder.previewHotkey();
 
 			// Clone form title to setup page
 			$('#wpforms-setup-name').val($('#wpforms-panel-field-settings-form_title').val());
@@ -1760,7 +1759,7 @@
 		},
 
 		/**
-		 * Update Stripe Receipt email field on form updates.
+		 * Update field mapped select items on form updates.
 		 *
 		 * @since 1.2.0
 		 * @param object event
@@ -1803,7 +1802,7 @@
 					if (fields[key].label.length) {
 						var label = wpf.sanitizeString(fields[key].label);
 					} else {
-						var label = 'Field #' + fields[key].val;
+						var label = wpforms_builder.field + ' #' + fields[key].val;
 					}
 
 					// Add to select if it is a field type allowed
@@ -1859,6 +1858,30 @@
 		 */
 		loadColorPickers: function() {
 			$('.wpforms-color-picker').minicolors();
+		},
+
+		/**
+		 * Secret preview hotkey.
+		 *
+		 * @since 1.2.4
+		 */
+		previewHotkey: function() {
+
+			var ctrlDown = false;
+
+			$(document).keydown(function(e) {
+				if (e.keyCode == 17) {
+					ctrlDown = true;
+				} else if (ctrlDown && e.keyCode == 80) {
+					window.open(wpforms_builder.preview_url);
+					ctrlDown = false;
+					return false;
+				}
+			}).keyup(function(e) {
+				if (e.keyCode == 17) {
+					ctrlDown = false;
+				} 
+			});
 		}
 	};
 

@@ -793,43 +793,36 @@ function wpforms_debug_data( $data, $echo = true ) {
  * @since 1.0.0
  * @param string $title
  * @param string $message
- * @param string|array $level
  * @param array $args
  */
-function wpforms_log( $title = '', $message = '', $level = 'errors', $args = array() ) {
+function wpforms_log( $title = '', $message = '', $args = array()  ) {
 
 	// Require log title
 	if ( empty( $title ) )
 		return;
 
 	// Force logging everything when in debug mode
-	if ( wpforms_debug() ) {
-		$level = 'all';
-	}
-
-	/**
-	 * Compare error levels to determine if we should log.
-	 * Current supported levels:
-	 * - All - always log. always. (all)
-	 * - Errors (errors)
-	 * - Spam (spam)
-	 * - Entries (entries)
-	 * - Conditional Logic (conditional_logic)
-	 */
-	if ( $level != 'all' ) {
-		$logging_levels = get_option( 'wpforms_logging', array() );
-		if ( !in_array( $level, $logging_levels ) ) {
+	if ( ! wpforms_debug() ) {
+		
+		/**
+		 * Compare error levels to determine if we should log.
+		 * Current supported levels:
+		 * - Errors (error)
+		 * - Spam (spam)
+		 * - Entries (entry)
+		 * - Payments (payment)
+		 * - Providers (provider)
+		 * - Conditional Logic (conditional_logic)
+		 */
+		$type   = !empty( $args['type'] ) ? (array) $args['type'] : array( 'error' );
+		$levels = get_option( 'wpforms_logging', array() );
+		$lvls   = array_intersect( $type, $levels );
+		if ( empty( $lvls ) ) {
 			return;
 		}
 	}
 
-	// Other args
-	$defaults = array(
-		'parent' => '0',
-		'type'   => '',
-	);
-	$args = wp_parse_args( $args, $defaults );
-
+	// Meta
 	if ( !empty( $args['form_id'] ) ) {
 		$meta = array( 'form' => absint( $args['form_id'] ) );
 	} elseif ( !empty( $args['meta'] ) ) {
@@ -838,13 +831,16 @@ function wpforms_log( $title = '', $message = '', $level = 'errors', $args = arr
 		$meta = '';
 	}
 
+	// Parent
+	$parent = !empty( $args['parent'] ) ? $args['parent'] : 0;
+
 	// Make arrays and objects look nice
 	if ( is_array( $message ) || is_object( $message ) ) {
 		$message = '<pre>' . print_r( $message, true ) . '</pre>';
 	} 
 
 	// Create log entry
-	wpforms()->logs->add( $title, $message, $args['parent'], $args['type'], $meta );
+	wpforms()->logs->add( $title, $message, $parent, $parent, $meta );
 }
 
 if ( ! function_exists( 'array_replace_recursive' ) ) : 

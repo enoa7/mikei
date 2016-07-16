@@ -35,7 +35,7 @@ class WPForms_Logging {
 	public function register_post_type() {
 
 		$log_args = array(
-			'labels'              => array( 'name' => __( 'WPForms Logs', 'wpforms' ) ),
+			'labels'              => array( 'name' => __( 'WPForms Logs', 'wpforms' ), 'menu_name' => __( 'Logs', 'wpforms' ) ),
 			'public'              => false,
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
@@ -44,10 +44,11 @@ class WPForms_Logging {
 			'rewrite'             => false,
 			'capability_type'     => 'post',
 			'supports'            => array( 'title', 'editor' ),
-			'can_export'          => false
+			'can_export'          => false,
+			'show_in_menu'        => 'wpforms-overview'
 		);
 
-		if ( ( ( defined( 'WPFORMS_DEBUG' ) && true === WP_DEBUG ) || ( defined( 'WPFORMS_LOG' ) && true === WPFORMS_LOG ) ) && is_super_admin() ) {
+		if ( wpforms_debug() ) {
 			$log_args['show_ui'] = true;
 		}
 
@@ -73,10 +74,12 @@ class WPForms_Logging {
 	public function log_types() {
 
 		$terms = array(
-			'payment_error',
-			'provider_error',
+			'payment',
+			'provider',
 			'spam',
 			'entry',
+			'error',
+			'conditional_logic'
 		);
 
 		return apply_filters( 'wpforms_log_types', $terms );
