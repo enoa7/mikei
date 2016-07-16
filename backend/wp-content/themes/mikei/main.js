@@ -13315,6 +13315,7 @@ return jQuery;
 
 }));
 
+!function($){$(".js_fixedcontent").length>0&&($.fn.fixedcontent=function(options){var defaults={marginTop:24,minWidth:767,zIndex:500},options=$.extend({},defaults,options);return this.each(function(){$(".js_fixedcontent").css({top:options.marginTop,"z-index":options.zIndex}),getContentOffset=function(){contentOffset=$(".js_fixedcontent").offset().top},getContentOffset(),setContentWidth=function(){parentWidth=$(".js_fixedcontent").parent().innerWidth(),$(".js_fixedcontent").css("width",parentWidth)},setContentWidth(),getContentHeight=function(){contentHeight=$(".js_fixedcontent").outerHeight()},getContentHeight(),setContentPosition=function(){$(window).innerHeight()>contentHeight+options.marginTop&&($(window).scrollTop()>=contentOffset-options.marginTop?$(".js_fixedcontent").css({position:"fixed"}):$(window).scrollTop()<contentOffset-options.marginTop&&$(".js_fixedcontent").css("position","static"))},setContentPosition(),$(window).resize(function(){setContentWidth()}),$(window).innerWidth()>=options.minWidth&&$(window).scroll(function(){setContentPosition()})})},$(".js_fixedcontent").fixedcontent())}(jQuery);
 (function($) {
 
 
@@ -13356,16 +13357,21 @@ return jQuery;
     $(document).ready(function() {
 
         Page.start();
+        $(".js_fixedcontent").fixedcontent({
+            marginTop: 0,
+            minWidth: 767,
+            zIndex: 500
+        });
         $('.banner.main-banner').slick({
 
             nextArrow: '<div class="slick-arrow next"><i class="fa fa-chevron-right"></div>',
             prevArrow: '<div class="slick-arrow prev"><i class="fa fa-chevron-left"></div>',
             responsive: [{
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false
-                    }
-                }]
+                breakpoint: 480,
+                settings: {
+                    arrows: false
+                }
+            }]
 
         });
 

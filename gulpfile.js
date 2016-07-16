@@ -44,9 +44,11 @@ var filesToMove = [
 
 var jsFiles = [
     basePaths.npm + 'jquery/dist/jquery.js',
+    // basePaths.npm + 'bootstrap.js',
     basePaths.npm + 'fastclick/lib/*.js',
     module.matchHeight + 'jquery.matchHeight.js',
     module.slick + 'slick.js',
+    basePaths.theme + 'js/plugins/*.js',
     basePaths.theme + 'js/main.dev.js'
 ]
 /* ========================================================
@@ -61,7 +63,7 @@ gulp.task('browserSync', function() {
     ];
 
     browserSync.init(files, {
-        proxy: "http://localhost:8888/mikei",
+        proxy: "http://localhost/mikei",
         notify: 'false'
     });
 });

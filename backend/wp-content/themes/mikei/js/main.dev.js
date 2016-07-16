@@ -39,16 +39,21 @@
     $(document).ready(function() {
 
         Page.start();
+        $(".js_fixedcontent").fixedcontent({
+            marginTop: 0,
+            minWidth: 767,
+            zIndex: 500
+        });
         $('.banner.main-banner').slick({
 
             nextArrow: '<div class="slick-arrow next"><i class="fa fa-chevron-right"></div>',
             prevArrow: '<div class="slick-arrow prev"><i class="fa fa-chevron-left"></div>',
             responsive: [{
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false
-                    }
-                }]
+                breakpoint: 480,
+                settings: {
+                    arrows: false
+                }
+            }]
 
         });
 
