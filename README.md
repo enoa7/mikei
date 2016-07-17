@@ -4,7 +4,7 @@
 
 create your own env.config under wp-content folder or if you want to use the default one, use below:
 
-```
+<!-- ```
 $env_config = [
 	'site_url'		=>	'localhost/mikei/backend/',
 	'home_url'		=>	'localhost/mikei',
@@ -15,7 +15,7 @@ $env_config = [
 
 ];
 
-```
+``` -->
 
 ## Step 2 - Import DB
 
