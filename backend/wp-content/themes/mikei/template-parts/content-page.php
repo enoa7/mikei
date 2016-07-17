@@ -15,12 +15,7 @@
 	</header><!-- .entry-header -->
 	<div class="content-container clearfix">
 		<div class="user-menu col-xs-12 col-sm-3">
-			<?php 
-				if(wpb_list_child_pages()) {
-					echo wpb_list_child_pages(); 	
-				}
-				
-			?>
+			<?php echo get_childpages(); ?>
 		</div>	
 		<div class="user-content col-xs-12 col-sm-9">
 		</div>

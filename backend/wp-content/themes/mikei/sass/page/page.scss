@@ -2,6 +2,7 @@
  *  Contains page-specific styling, if necessary
  */
 
+// container for content which houses the sidebar menu and the page-content
 .content-container {
     @include spacemar(1em);
     border: 1px solid #ddd;
@@ -24,14 +25,8 @@
     background: $color__bg;
     min-height: 20em;
     height: 100%;
-    .section-content.content-post-thumb {
-        @include spacepad(0.5em);
-        cursor: pointer;
-        &.active {
-            .section-title {
-                color: $color__secondary;
-            }
-        }
+    > ul {
+        @extend .nodots;
     }
 }
 

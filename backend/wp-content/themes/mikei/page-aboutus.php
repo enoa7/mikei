@@ -15,7 +15,7 @@ get_header(); ?>
 			<div class="content-container clearfix">
 				<div class="user-menu col-xs-12 col-sm-3">
 					<?php
-						$aboutus = new ArticlePost('post-thumb', '3');
+						$aboutus = new ArticlePost('post-sidebarmenu', '3');
 						$aboutus->getData();
 					?>
 				</div>	

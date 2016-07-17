@@ -247,17 +247,25 @@ function get_article() {
  * Display child pages list
  * ================================================================== */
 
-function wpb_list_child_pages() { 
+function get_childpages() { 
 
-global $post; 
-if ( is_page() && $post->post_parent )
-  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->post_parent . '&echo=0' );
-else
-  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->ID . '&echo=0' );
-if ( $childpages ) {
-  $string = '<ul class="content-list list-parent nodots">' . $childpages . '</ul>';
-}
-return $string;
+	global $post; 
+	if ( is_page() && $post->post_parent )
+	  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->post_parent . '&echo=0' );
+	else
+	  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->ID . '&echo=0' );
+	if ( $childpages ) {
+
+		$html  = '<ul class="nodots">';
+		$html .=  $childpages;
+		$html .= '</ul>';
+
+	}
+
+	return $html;
 }
 
-add_shortcode('wpb_childpages', 'wpb_list_child_pages');
+add_shortcode('wpb_childpages', 'get_childpages');
+
+
+?>

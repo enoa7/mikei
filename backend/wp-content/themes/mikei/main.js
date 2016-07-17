@@ -13324,7 +13324,7 @@ return jQuery;
         start: function(settings) {
             Page.config = {
                 container: $('.content-container > div'),
-                subMenu: $('.section-content.content-post-thumb'),
+                subMenu: $('.section-content.content-post-childmenu'),
                 content: $('.section-content.content-post'),
                 firstChild: $('.content-container > div > div:first-child')
             };

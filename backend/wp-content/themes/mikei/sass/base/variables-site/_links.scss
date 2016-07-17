@@ -14,6 +14,17 @@ a {
     &:hover,
     &:active {
         outline: 0;
+        text-decoration: none !important;
+    }
+}
+
+// set the styling for all a tag inside the .user-menu (child menu)
+.user-menu a {
+    color: $color__primary;
+    @include spacepad(0.5em);
+    display: block;
+    &:hover {
+        color: $color__secondary;
     }
 }
 
