@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying page content in page.php
+ * Template part for displaying page content in child page.php
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
@@ -18,7 +18,7 @@
 			<?php echo get_childpages(); ?>
 		</div>	
 		<div class="user-content col-xs-12 col-sm-9">
-			<?php the_content();?>
+			<?php echo 'this is child page' ?>
 		</div>
 	</div>
 </article><!-- #post-## -->

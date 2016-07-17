@@ -161,9 +161,9 @@ require get_template_directory() . '/inc/jetpack.php';
  * Additional Image Sizes
  * ================================================================== */
 add_image_size( 'mainBanner_lg', 1200, 800, hard);
-// add_image_size( 'mainBanner_md', 992, 400, true);
 add_image_size( 'mainBanner_xs', 600, 600, true);
 add_image_size( 'thumb', 600, 350, hard);
+add_image_size( 'product', 265, 265, hard);
 
 /* ==================================================================
  * Add the_slug() function
@@ -231,7 +231,6 @@ function get_article() {
 	if ( $article->have_posts() ) {
 		while ( $article->have_posts() ) {
 			$article->the_post();
-			// do something
 			get_template_part('template-parts/content', 'post-list');
 		}
 	} else {
@@ -245,21 +244,29 @@ function get_article() {
 
 /* ==================================================================
  * Display child pages list
+ * use wp_list_pages to grab the child pages and put in a list 
  * ================================================================== */
 
 function get_childpages() { 
 
 	global $post; 
-	if ( is_page() && $post->post_parent )
+	if ( is_page() && $post->post_parent ) {
 	  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->post_parent . '&echo=0' );
-	else
+	  // echo 'this is a a child page';
+	}
+	else {
 	  $childpages = wp_list_pages( 'sort_column=menu_order&title_li=&child_of=' . $post->ID . '&echo=0' );
+		
+		// echo 'this is a parent page';
+	}
+
 	if ( $childpages ) {
 
+		// create the template with the current page lists as displayed before any other child pages
 		$html  = '<ul class="nodots">';
-		$html .=  $childpages;
+		$html .= '<li class="page_item page-item-'. $post->post_parent .'"><a href="'. get_the_permalink($post->post_parent) .'">'. get_the_title($post->post_parent) .'</a></li>'; //current page list
+		$html .=  $childpages; // this child pages lists
 		$html .= '</ul>';
-
 	}
 
 	return $html;
@@ -267,5 +274,62 @@ function get_childpages() {
 
 add_shortcode('wpb_childpages', 'get_childpages');
 
+
+/* ==================================================================
+ * Get posts/pages by category
+ * ================================================================== */
+
+function get_posts_by_category($category) {
+	// WP_Query arguments
+	$args = array (
+		'post_status'            => array( 'publish' ),
+		'cat'                    => $category,
+	);
+
+	// The Query
+	$posts = new WP_Query( $args );
+
+	// The Loop
+	if ( $posts->have_posts() ) {
+		while ( $posts->have_posts() ) {
+			$posts->the_post();
+			the_title();
+		}
+	} else {
+		// no posts found
+	}
+
+	// Restore original Post Data
+	wp_reset_postdata();
+}
+
+/* ==================================================================
+ * Get product posts
+ * ================================================================== */
+
+function get_products() {
+
+	// WP_Query arguments
+	$args = array (
+		'post_status'            => array( 'publish' ),
+		'cat'                    => 7,
+	);
+
+	// The Query
+	$posts = new WP_Query( $args );
+
+	// The Loop
+	if ( $posts->have_posts() ) {
+		while ( $posts->have_posts() ) {
+			$posts->the_post();
+			get_template_part('template-parts/content', 'post-product');
+		}
+	} else {
+		// no posts found
+	}
+
+	// Restore original Post Data
+	wp_reset_postdata();
+}
 
 ?>
