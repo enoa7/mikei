@@ -11,33 +11,18 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		<?php the_post_thumbnail('mainBanner_lg', array('class' => 'img-responsive fullwidth')); ?>
 	</header><!-- .entry-header -->
-
-	<div class="entry-content">
-		<?php
-			the_content();
-
-			wp_link_pages( array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'mikei' ),
-				'after'  => '</div>',
-			) );
-		?>
-	</div><!-- .entry-content -->
-
-	<?php if ( get_edit_post_link() ) : ?>
-		<footer class="entry-footer">
-			<?php
-				edit_post_link(
-					sprintf(
-						/* translators: %s: Name of current post */
-						esc_html__( 'Edit %s', 'mikei' ),
-						the_title( '<span class="screen-reader-text">"', '"</span>', false )
-					),
-					'<span class="edit-link">',
-					'</span>'
-				);
+	<div class="content-container clearfix">
+		<div class="user-menu col-xs-12 col-sm-3">
+			<?php 
+				if(wpb_list_child_pages()) {
+					echo wpb_list_child_pages(); 	
+				}
+				
 			?>
-		</footer><!-- .entry-footer -->
-	<?php endif; ?>
+		</div>	
+		<div class="user-content col-xs-12 col-sm-9">
+		</div>
+	</div>
 </article><!-- #post-## -->
