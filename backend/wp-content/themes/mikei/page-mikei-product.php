@@ -7,9 +7,9 @@
  * @package mikei
  */
 
-?>
+get_header(); ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<article id="<?php strtolower(the_slug()); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<?php the_post_thumbnail('mainBanner_lg', array('class' => 'img-responsive fullwidth')); ?>
 	</header><!-- .entry-header -->
@@ -18,7 +18,13 @@
 			<?php echo get_childpages(); ?>
 		</div>	
 		<div class="user-content col-xs-12 col-sm-9">
-			<?php the_content();?>
+			<?php get_products(); ?>
 		</div>
 	</div>
 </article><!-- #post-## -->
+
+<?php
+// get_sidebar();
+get_footer();
+
+?>

@@ -20,7 +20,12 @@ get_header(); ?>
 			<?php
 			while ( have_posts() ) : the_post();
 
-				get_template_part( 'template-parts/content', 'page' );
+					if ( is_page() && $post->post_parent ) {
+						get_template_part( 'template-parts/content', 'child-page' );
+
+					} else {
+						get_template_part( 'template-parts/content', 'page' );
+					}
 
 			endwhile; // End of the loop.
 			?>
