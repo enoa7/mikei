@@ -117,10 +117,13 @@
                 @extend .nodots;
                 // background-color: $color__bg-header;
                 background-color: lighten($color__bg-header, 10%);
-                > li a {
-                    &:hover {
-                        color: #000;
-                        background-color: lighten($color__bg-header, 80%);
+                > li {
+                    width: 100%;
+                    a {
+                        &:hover {
+                            color: #000;
+                            background-color: lighten($color__bg-header, 80%);
+                        }
                     }
                 }
             }
