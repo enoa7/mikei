@@ -134,11 +134,38 @@
 #site-navigation {
     .menu-megamenu-container {
         //push the nav to the right so its not overlapping with the site logo
-        padding-left: 4em;
+        //on desktop
+        @include breakpoint(sm) {
+            padding-left: 4em;
+        }
     }
     background: $color__primary;
     #primary-menu.menu {
         @include clearfix();
         @extend .nodots;
+    }
+}
+
+
+/**
+ * Mobile Megamenu
+ */
+
+.mobile #site-navigation {
+    ul {
+        @extend .nodots;
+    }
+    li {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.site-masthead-container {
+    background: #000;
+    padding: 1em;
+    .site-barmenu {
+        color: #fff;
+        text-align: right;
     }
 }

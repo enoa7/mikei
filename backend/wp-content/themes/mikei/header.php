@@ -24,18 +24,14 @@
 <div id="page" class="site <?php echo (!is_mobile() ? 'container' : '')?>">
 	<a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'mikei' ); ?></a>
 
-	<header id="masthead" class="site-header" role="banner">
-		<div class="site-store-locator">
-			Store Locator
-		</div>
-		<div class="fixed-header js_fixedcontent">
-			<div class="site-branding">
-				<img src="<?php header_image(); ?>" height="<?php echo get_custom_header()->height; ?>" width="<?php echo get_custom_header()->width; ?>" alt="" />
-			</div>
-			<nav id="site-navigation" class="main-navigation" role="navigation">
-				<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_id' => 'primary-menu' ) ); ?>
-			</nav>
-		</div>
-	</header><!-- #masthead -->
+	<?php 
+
+		if(!is_mobile()) {
+			get_template_part('template-parts/masthead', 'desktop');
+		} else {
+			get_template_part('template-parts/masthead', 'mobile');
+		}
+
+	 ?>
 
 	<div id="content" class="site-content">

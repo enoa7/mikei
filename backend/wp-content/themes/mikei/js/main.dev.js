@@ -39,11 +39,13 @@
     $(document).ready(function() {
 
         Page.start();
-        $(".js_fixedcontent").fixedcontent({
-            marginTop: 0,
-            minWidth: 767,
-            zIndex: 500
+
+        var mobile_menu = $('.site-barmenu > .trigger');
+        var mobile_nav = $('.mobile #site-navigation');
+        mobile_menu.on('click', function(){
+            mobile_nav.slideToggle('fast');
         });
+
         $('.banner.main-banner').slick({
 
             nextArrow: '<div class="slick-arrow next"><i class="fa fa-chevron-right"></div>',
